@@ -1,11 +1,18 @@
-<html>
-    <title>
+{% extends 'base.html' %}
 
-    </title>
-    <body>
-       <p>One at a time ma-friends</p>
+{% block head_title %}
+    {{ object.title}} | {{ block.super}}
+{% endblock head_title %}
 
-       <p>{{ object.id}} -- {{ object.title}}</p>
-    </body>
-</html>
+{% block content %}
+
+<div class="col-sm-6 col-sm-offset-3">
+<p>One at a time ma-friends</p>
+
+<p>{{ object.title}} <small>{{ object.timestamp | timesince }} </small></p>
+<p>{{ object.id}} -- {{ object.title}}</p>
+
+<p>{{ object.content | linebreaks}}</p>
+</div>
+{% endblock content %}
 

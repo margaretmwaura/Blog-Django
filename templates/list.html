@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Ma nigga shit is working</h1>
+<h1>{{ title }}</h1>
+<p>We looping I am exicted</p>
+
+<div class="col-sm-8 col-sm-offset-2">
+<div class="row">
+{% for post in object_list %}
+    
+   <div class="col-sm-6">
+      <div class="thumbnail">
+           <p><a href="{{ post.get_absolute_url }}">{{ post.id }}</a> </p>
+           <p>{{ post.title }} <small>{{ post.timestamp | timesince}}</small></p>
+           <p>{{ post.content | linebreaks | truncatechars:430}}</p>
+           <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
+      </div>
+   </div>
+
+{% cycle "" "<div class='col-sm-12'><hr/></div></div><div class='row'>" %}
+{% endfor %}
+
+
+<div class="pagination">
+   <span class="step-links">
+      {%  if object_list.has_previous %}
+         <a href="?page={{ object_list.previous_page_number }}">Previous</a>
+      {%  endif %}
+
+      <span class="current">
+         Page {{ object_list.number }} of {{ object_list.paginator.num_pages}}
+      </span>
+
+      {%  if object_list.has_next %}
+      <a href="?page={{ object_list.next_page_number }}">Next</a>
+   {%  endif %}
+   </span>
+</div>
+</div>
+</div>
+
+{% endblock content %}

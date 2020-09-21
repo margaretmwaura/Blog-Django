@@ -1,0 +1,20 @@
+<p>Ma ladies I got good news; we can edit </p>
+
+<p>The title - {{ obj.title}} </p>
+<p>The content - {{ obj.content}}</p>
+
+<p>The form for saving</p>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="POST" action=".">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Edit"/>
+</form>
