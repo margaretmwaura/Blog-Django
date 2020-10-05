@@ -12,8 +12,12 @@
    <div class="col-sm-6">
       <div class="thumbnail">
            <p><a href="{{ post.get_absolute_url }}">{{ post.id }}</a> </p>
-           <p>{{ post.title }} <small>{{ post.timestamp | timesince}}</small></p>
+           {% if post.image %}
+           <!-- <img src="{{ post.image.url}}" class="img-responsive"/> -->
+           {% endif %}
+           <p>{{ post.title }} <small>{{ post.publish | timesince}}</small></p>
            <p>{{ post.content | linebreaks | truncatechars:430}}</p>
+           <p>Author : {{ object.user.get_full_name }}</p>
            <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
       </div>
    </div>
