@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from django.db.models import Q
 # Create your views here.
 
 from .models import Post
@@ -14,7 +15,17 @@ def post_list(request):
     query_set_list = Post.objects.all()
     if not request.user.is_staff or not request.user.is_superuser:
         query_set_list = Post.objects.active()
-    paginator = Paginator(query_set_list, 5)
+
+    query = request.GET.get('q')
+
+    if query:
+        query_set_list = query_set_list.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(user__first_name__icontains=query)
+            ).distinct()
+
+    paginator = Paginator(query_set_list, 1)
 
     page = request.GET.get('page')
     try:
