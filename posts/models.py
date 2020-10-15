@@ -12,6 +12,10 @@ from django.conf import settings
 
 from django.utils import timezone
 
+from comments.models import Comment
+
+from django.contrib.contenttypes.models import ContentType
+
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
         return super(PostManager, self).filter(draft=False).filter(publish__lte=timezone.now())
@@ -46,6 +50,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("posts:detail", kwargs={"id" : self.id})
 
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
+
     class Meta:
         ordering = ["-updated","-timestamp"]
 
@@ -55,7 +71,7 @@ def create_slug(instance, new_slug=None):
         slug = new_slug
     qs = Post.objects.filter(slug=slug).order_by("-id")
     exists = qs.exists()
-    if exists:
+    if exists:  
         new_slug = "%s-%s" %(slug, qs.first().id)
         return create_slug(instance, new_slug=new_slug)
     return slug

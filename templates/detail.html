@@ -42,14 +42,46 @@
 <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>Google+</a>
 </p>
 
-<p>{{ object.content | linebreaks}}</p>
+<div class="row">
+    <div class="col-sm-12 content-markdown">
+        <p>{{ object.content | safe | linebreaks}}</p>
+    </div> 
+</div>
+<div><p>Comments section below</p></div>
+    <form method="POST" action=".">
+        {% csrf_token %}
+        {{ comment_form }}
+        <input type="submit" value="Post comment" class="btn btn-default"/>
+    </form>
+    {% for comment in comments %}
+       <div class="">{{comment.content}}
+       <br/>
+       <small> {{comment.user}} ,  {{ comment.timestamp | timesince}} ago </small>
 
-<div class="fb-comments" 
+        {% for childcomment in comment.children %}
+            <div class=""><small>{{childcomment.content}}</small>
+            <br/>
+            <small> {{childcomment.user}} ,  {{ childcomment.timestamp | timesince}} ago </small>
+            </div>
+       {% endfor %}
+        
+       <form method="POST" action=".">
+          {% csrf_token %}
+          {{ comment_form }}
+          <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
+          <input type="submit" value="Reply " class="btn btn-default"/>
+       </form>
+       </div>
+       <hr/>
+    {% endfor %}
+
+<!-- <div class="fb-comments" 
 data-href="{{ request.build_absolute_uri }}" 
 data-numposts="5" 
 data-width="">
-</div>
+</div> -->
 
 </div>
 {% endblock content %}
 
+  
