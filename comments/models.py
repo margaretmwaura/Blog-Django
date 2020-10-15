@@ -7,6 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 
 from django.conf import settings
 
+from django.core.urlresolvers import reverse
+
 # Create your models here.
 
 class CommentManager(models.Manager):
@@ -44,6 +46,9 @@ class Comment(models.Model):
 
      def children(self):
          return Comment.objects.filter(parent=self)
+
+     def get_absolute_url(self):
+        return reverse("comments:thread", kwargs={"id" : self.id})
 
      @property
      def is_parent(self):

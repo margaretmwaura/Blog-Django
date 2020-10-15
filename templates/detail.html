@@ -58,6 +58,8 @@
        <br/>
        <small> {{comment.user}} ,  {{ comment.timestamp | timesince}} ago </small>
 
+       <a href="{{ comment.get_absolute_url }}">Thread</a>
+
         {% for childcomment in comment.children %}
             <div class=""><small>{{childcomment.content}}</small>
             <br/>
