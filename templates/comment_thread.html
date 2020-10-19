@@ -16,10 +16,11 @@
        <div class="">{{comment.content}}
        <br/>
        <small> {{comment.user}} ,  {{ comment.timestamp | timesince}} ago </small>
-
+        <a href="{{ comment.get_delete_url }}">Delete</a>
        <hr/> 
         {% for childcomment in comment.children %}
-            <div class=""><small>{{childcomment.content}}</small>
+            <div class=""><small>{{childcomment.content}}</small> 
+                <a href="{{ childcomment.get_delete_url }}">Delete</a>
             <br/>
             <small> {{childcomment.user}} ,  {{ childcomment.timestamp | timesince}} ago </small>
             </div>

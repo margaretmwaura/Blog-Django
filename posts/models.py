@@ -16,6 +16,8 @@ from comments.models import Comment
 
 from django.contrib.contenttypes.models import ContentType
 
+from .utils import get_read_time
+
 class PostManager(models.Manager):
     def active(self, *args, **kwargs):
         return super(PostManager, self).filter(draft=False).filter(publish__lte=timezone.now())
@@ -36,6 +38,7 @@ class Post(models.Model):
     content = models.TextField()
     draft = models.BooleanField(default=False)
     publish = models.DateField(auto_now=False, auto_now_add=False)
+    read_time = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now=False,auto_now_add=True)
     updated = models.DateTimeField(auto_now=True,auto_now_add=False)
 
@@ -79,6 +82,9 @@ def create_slug(instance, new_slug=None):
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
+
+    if instance.content:
+        instance.read_time = get_read_time(instance.content)
 
 pre_save.connect(pre_save_post_receiver, sender=Post)
 

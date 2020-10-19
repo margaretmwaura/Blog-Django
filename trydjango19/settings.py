@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
     'comments', 
     'posts',
 ]
@@ -53,6 +54,8 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'trydjango19.urls'
+
+LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {

@@ -23,6 +23,8 @@
 </small>
 </p>
 <p>{{ object.id}} -- {{ object.title}}</p>
+<!-- <p>Read Time -- {{ object.read_time | time:"i" }} minutes</p> -->
+<p>Read Time -- {{ object.read_time }} minutes</p>
 <p>Author : {{ object.user.get_full_name }}</p>
 <p>
     <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width=""
@@ -48,11 +50,16 @@
     </div> 
 </div>
 <div><p>Comments section below</p></div>
+    {% if request.user.is_authenticated %}
     <form method="POST" action=".">
         {% csrf_token %}
         {{ comment_form }}
         <input type="submit" value="Post comment" class="btn btn-default"/>
     </form>
+    {% else %}
+        <p>Please Login to get to comment </p>
+    {% endif %}
+
     {% for comment in comments %}
        <div class="">{{comment.content}}
        <br/>
@@ -67,12 +74,16 @@
             </div>
        {% endfor %}
         
+       {% if request.user.is_authenticated %}
        <form method="POST" action=".">
           {% csrf_token %}
           {{ comment_form }}
           <input type="hidden" name="parent_id" value="{{ comment.id }}"/>
           <input type="submit" value="Reply " class="btn btn-default"/>
        </form>
+       {% else %}
+        <p>Please Login to get to comment </p>
+       {% endif %}
        </div>
        <hr/>
     {% endfor %}
