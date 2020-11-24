@@ -73,7 +73,7 @@ class PostDetailSerializer(ModelSerializer):
     def get_image(self, obj):
         try:
             image = obj.image.url
-        except:
+        except: 
             image = None
         return image
 
